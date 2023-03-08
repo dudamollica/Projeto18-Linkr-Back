@@ -5,11 +5,11 @@ import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
 export async function signUp(req, res) {
-  const { username, email, picture_url, password, confirmPassword } = req.body;
+  const { username, email, picture_url, password } = req.body;
   const hashPassword = bcrypt.hashSync(password, 10);
 
   try {
-    const { rowCount } = await authRepository.insertUserIntoUser(
+    const { rowCount } = await authRepository.insertUserIntoUsers(
       username,
       email,
       picture_url,
@@ -19,7 +19,33 @@ export async function signUp(req, res) {
     else return res.sendStatus(STATUS_CODE.CONFLICT);
   } catch (error) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    console.log(error);
   }
 }
 
-export async function signIn(req, res) {}
+export async function signIn(req, res) {
+  const { password } = req.body;
+  const { user } = res.locals;
+  const validPassword = bcrypt.compareSync(password, user.password);
+
+  try {
+    if (!validPassword) {
+      return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+    }
+
+    const token = uuid();
+
+    const { rows: sessionExists } = await authRepository.selectUserFromSessions(
+      user.id
+    );
+
+    if (sessionExists.length !== 0) {
+      await authRepository.deleteUserFromSessions(sessionExists[0].token);
+    }
+
+    await authRepository.insertUserIntoSessions(user.id, token);
+    return res.status(STATUS_CODE.OK).send({ token });
+  } catch (error) {
+    return res.sendStatus(STATUS_CODE.SERVER_ERROR);
+  }
+}
