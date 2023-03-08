@@ -9,7 +9,6 @@ export async function schemasValidation(req, res, next) {
     const { error } = schemas.signUpSchema.validate(req.body, {
       abortEarly: false,
     });
-    next();
   }
 
   if (path === "/signin") {
@@ -22,7 +21,7 @@ export async function schemasValidation(req, res, next) {
     const message = result.error.details
       .map((detail) => detail.message)
       .join(",");
-    return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send({ message });
+    return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send(error.message);
   }
 
   next();

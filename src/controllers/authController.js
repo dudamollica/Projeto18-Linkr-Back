@@ -19,7 +19,6 @@ export async function signUp(req, res) {
     else return res.sendStatus(STATUS_CODE.CONFLICT);
   } catch (error) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
-    console.log(error);
   }
 }
 
@@ -49,3 +48,5 @@ export async function signIn(req, res) {
     return res.sendStatus(STATUS_CODE.SERVER_ERROR);
   }
 }
+
+
