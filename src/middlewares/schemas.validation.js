@@ -23,4 +23,15 @@ export async function schemasValidation(req, res, next) {
       abortEarly: false,
     });
   } */
+
+  if (path === "/timeline"){
+    const { error } = schemas.timelineSchema.validate(req.body, {
+      abortEarly: false
+    });
+    if (error) {
+      const message = error.details.map((detail) = detail.message);
+      return res.send(STATUS_CODE.UNPROCESSABLE_ENTITY).send({ message });
+    }
+    next();
+  }
 }
