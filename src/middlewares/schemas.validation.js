@@ -3,24 +3,28 @@ import { STATUS_CODE } from "../enums/statusCode.js";
 
 export async function schemasValidation(req, res, next) {
   const { path } = req.route;
+  let result;
 
   if (path === "/signup") {
     const { error } = schemas.signUpSchema.validate(req.body, {
       abortEarly: false,
     });
-    if (error) {
-      const message = error.details
-        .map((detail) => detail.message)
-        .join(",")
-        .replace("[ref:password]", "equal to password");
-      return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send({ message });
-    }
-    next();
   }
 
-  /* if (path === "/signin") {
+  if (path === "/signin") {
     result = schemas.signInSchema.validate(req.body, {
       abortEarly: false,
     });
-  } */
+  }
+
+  if (result?.error) {
+    const message = result.error.details
+      .map((detail) => detail.message)
+      .join(",");
+    return res.status(STATUS_CODE.UNPROCESSABLE_ENTITY).send(error.message);
+  }
+
+  next();
 }
+
+
