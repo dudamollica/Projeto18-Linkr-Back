@@ -1,4 +1,4 @@
-import { db } from "../config/database.js";
+import db from "../config/database.js";
 import { TABLE } from "../enums/tables.js";
 
 export async function insertUserIntoUsers(
@@ -34,8 +34,22 @@ export async function deleteUserFromSessions(token) {
 }
 
 export async function insertUserIntoSessions(user_id, token) {
-  return db.query(
+  return await db.query(
     `INSERT INTO ${TABLE.SESSIONS} (user_id, token) VALUES ($1, $2);`,
     [user_id, token]
   );
+}
+
+export async function searchToken(token){
+  return await db.query(
+    `SELECT * FROM sessions WHERE token=$1;`,
+    [token]
+  );
+}
+
+export async function searchUser(userId){
+  return await db.query(
+    `SELECT * FROM users WHERE id=$1;`,
+    [userId]
+    );
 }
