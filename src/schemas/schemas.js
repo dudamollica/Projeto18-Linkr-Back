@@ -11,6 +11,10 @@ const schemas = {
     email: Joi.string().trim().required(),
     password: Joi.string().trim().required(),
   }),
+  timelineSchema: Joi.object().keys({
+    url: Joi.string().uri().required(),
+    post_text: Joi.string().required()
+  })
 };
 
 export { schemas };
