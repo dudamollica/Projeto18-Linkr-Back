@@ -27,6 +27,12 @@ export async function selectUserFromSessions(user_id) {
   ]);
 }
 
+export async function selectUserByToken(token) {
+  return await db.query(`SELECT * FROM ${TABLE.SESSIONS} WHERE token = $1;`, [
+    token,
+  ]);
+}
+
 export async function deleteUserFromSessions(token) {
   return await db.query(`DELETE FROM ${TABLE.SESSIONS} WHERE token = $1;`, [
     token,
