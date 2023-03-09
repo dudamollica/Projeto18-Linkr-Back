@@ -19,4 +19,14 @@ export async function queryGetHashtag() {
     `)
 }
 
+export async function queryGetPostByHashtag(hashtag) {
+    return await db.query(`
+    SELECT name AS hashtag_title, posts_id, posts.* 
+    FROM hashtags 
+    JOIN posts 
+    ON posts_id = posts.id 
+    WHERE name = $1;
+    `, [hashtag])
+}
+
 
