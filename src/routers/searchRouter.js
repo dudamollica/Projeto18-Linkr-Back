@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { searchUsername, UsernameById } from "../controllers/searchController.js";
-import { validate } from "../middlewares/auth.middleware.js";
+import { searchUsername, searchUsernameById, getPostById } from "../controllers/searchController.js";
+import { authenticateUser } from "../middlewares/auth.middleware.js";
 
 const searchRouter = Router();
 
-searchRouter.post("/timeline/user", validate.authUser, searchUsername);
-searchRouter.get("/user/:id", UsernameById);
+searchRouter.post("/timeline/user", authenticateUser, searchUsername);
+searchRouter.get("/user/:id", searchUsernameById);
+searchRouter.get("/timeline/user/:id", authenticateUser, getPostById);
 
 export default searchRouter;

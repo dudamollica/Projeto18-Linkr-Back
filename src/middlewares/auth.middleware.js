@@ -1,11 +1,13 @@
 import { STATUS_CODE } from "../enums/statusCode.js";
-import { selectUserByEmail, searchToken, searchUser } from "../repositories/authRepository.js";
+import * as authRepository from "../repositories/authRepository.js";
 
-async function validateUser(req, res, next) {
+export async function validateUser(req, res, next) {
   const { path } = req.route;
 
   try {
-    const { rows: user } = await selectUserByEmail(req.body.email);
+    const { rows: user } = await authRepository.selectUserByEmail(
+      req.body.email
+    );
 
     if (user.length !== 0 && path === "/signup") {
       return res.sendStatus(STATUS_CODE.CONFLICT);
@@ -22,46 +24,26 @@ async function validateUser(req, res, next) {
   next();
 }
 
-async function authUser(req, res, next) {
-  const authorization = req.headers.authorization;
-  
-  if(!authorization) {
-    return res.sendStatus(401)
-  } 
+export async function authenticateUser(req, res, next) {
+  const { authorization } = req.headers;
 
-  const token = authorization?.replace("Bearer ", "");
+  if (!authorization) {
+    return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
+  }
 
-  if(!token) {
-    return res.senStatus(401)
-  };
+  const token = authorization.replace("Bearer ", "");
 
   try {
-    const tokenExists = await searchToken(token);
-
-    if (tokenExists.rowCount === 0) {
-      return res.sendStatus(401);
+    const { rows } = await authRepository.selectUserByToken(token);
+    if (rows.length === 0) {
+      return res.sendStatus(STATUS_CODE.UNAUTHORIZED);
     }
 
-    const userId = tokenExists.rows[0].user_id;
-
-    const tokenValide = await searchUser(userId);
-
-    const userInfo = tokenValide.rows[0];
-
-    if (!tokenValide) {
-      return res.status(401);
-    }
-
-    res.locals.userInfo = userInfo
-
+    res.locals.user = rows[0].user_id;
+    res.locals.token = token;
     next();
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
   }
 }
 
-export const validate = {
-  validateUser,
-  authUser
-}

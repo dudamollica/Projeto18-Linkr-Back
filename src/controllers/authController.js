@@ -25,8 +25,7 @@ export async function signUp(req, res) {
 export async function signIn(req, res) {
   const { password } = req.body;
   const { user } = res.locals;
-  console.log(user)
-  console.log(user.password)
+
   const validPassword = bcrypt.compareSync(password, user.password);
 
   try {
@@ -50,3 +49,24 @@ export async function signIn(req, res) {
     return res.sendStatus(STATUS_CODE.SERVER_ERROR);
   }
 }
+
+export async function signOut(req, res) {
+  const { user_id } = res.locals;
+
+  try {
+    const { rows } = await authRepository.selectUserFromSessions(user_id);
+
+    if (rows.length === 0) {
+      return res.sendStatus(STATUS_CODE.OK);
+    }
+
+    await authRepository.deleteUserFromSessions(rows[0].token);
+    return res.sendStatus(STATUS_CODE.OK);
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+  }
+}
+
+
+
+
