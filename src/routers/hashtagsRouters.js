@@ -3,6 +3,8 @@ import { hashtagsValidate } from '../middlewares/hashtags.middleware.js'
 
 const hashtagsRouter = Router()
 
+
+hashtagsRouter.get('/hashtag', hashtagsValidate)
 hashtagsRouter.get('/hashtag/:hashtag', hashtagsValidate)
 
 export default hashtagsRouter
