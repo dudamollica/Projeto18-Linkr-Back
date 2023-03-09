@@ -66,7 +66,3 @@ export async function signOut(req, res) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
   }
 }
-
-
-
-

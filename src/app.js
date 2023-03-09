@@ -13,6 +13,8 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+server.use(authRouter);
+server.use(searchRouter);
 server.use([authRouter, timelineRouter]);
 server.use(searchRouter);
 server.use([authRouter, hashtagsRouter]);
