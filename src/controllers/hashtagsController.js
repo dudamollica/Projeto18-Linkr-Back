@@ -1,3 +1,4 @@
+import { queryGetHashtag } from '../repositories/hashtagsRepository.js'
 
 export async function getHashtagByName(req, res) {
     const { rows } = res.locals.hashtags
@@ -8,6 +9,16 @@ export async function getHashtagByName(req, res) {
                 name: elm.name
             }
         })
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export async function getTrendingTopics(req, res) {
+    try {
+        const { rows } = await queryGetHashtag()
+
+        res.status(200).send(rows)
     } catch (error) {
         res.status(500).send(error)
     }

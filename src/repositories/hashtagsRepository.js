@@ -8,4 +8,15 @@ export async function queryAtHastagTable(hashtag) {
     `, [hashtag])
 }
 
+export async function queryGetHashtag() {
+    return await db.query(`
+    SELECT name,
+    COUNT (name) AS Total 
+    FROM hashtags
+    GROUP BY name
+    ORDER BY count(name) DESC
+    LIMIT 10
+    `)
+}
+
 
