@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { postPublish } from "../controllers/timelineController.js";
-import { schemasValidation } from "../middlewares/schemas.validation.js";
+import { validatePostTimeline } from "../middlewares/timelineValidate.js";
 
 const timelineRouter = Router();
 
-timelineRouter.post("/timeline", schemasValidation, postPublish);
+timelineRouter.post("/timeline", validatePostTimeline, postPublish);
 
 export default timelineRouter;

@@ -1,6 +1,6 @@
 const TABLE = Object.freeze({
   USERS: "users",
-  SESSION: "seesion",
+  SESSIONS: "sessions",
   POSTS: "posts",
 });
 
