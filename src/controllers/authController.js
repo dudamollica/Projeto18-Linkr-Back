@@ -49,4 +49,21 @@ export async function signIn(req, res) {
   }
 }
 
+export async function signOut(req, res) {
+  const { user_id } = res.locals;
+
+  try {
+    const { rows } = await authRepository.selectUserFromSessions(user_id);
+
+    if (rows.length === 0) {
+      return res.sendStatus(STATUS_CODE.OK);
+    }
+
+    await authRepository.deleteUserFromSessions(rows[0].token);
+    return res.sendStatus(STATUS_CODE.OK);
+  } catch (error) {
+    return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+  }
+}
+
 
