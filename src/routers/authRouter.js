@@ -12,7 +12,6 @@ const authRouter = Router();
 
 authRouter.post("/signup", schemasValidation, validate.validateUser, signUp);
 authRouter.post("/signin", schemasValidation, validate.validateUser, signIn);
-=========
 authRouter.post("/signup", schemasValidation, validateUser, signUp);
 authRouter.post("/signin", schemasValidation, validateUser, signIn);
 authRouter.delete("/signout", authenticateUser, signOut);
