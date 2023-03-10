@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import chalk from "chalk";
 
 import authRouter from "./routers/authRouter.js";
+import searchRouter from "./routers/searchRouter.js";
 import timelineRouter from "./routers/timelineRouter.js";
 import hashtagsRouter from './routers/hashtagsRouters.js'
 
@@ -12,7 +13,10 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+server.use(authRouter);
+server.use(searchRouter);
 server.use([authRouter, timelineRouter]);
+server.use(searchRouter);
 server.use([authRouter, hashtagsRouter]);
 
 server.listen(process.env.PORT, () =>

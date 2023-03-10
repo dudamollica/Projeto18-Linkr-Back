@@ -1,4 +1,4 @@
-import { db } from "../config/database.js";
+import db from "../config/database.js";
 
 export async function queryAtHastagTable(hashtag) {
     return await db.query(`

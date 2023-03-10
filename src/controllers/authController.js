@@ -25,6 +25,7 @@ export async function signUp(req, res) {
 export async function signIn(req, res) {
   const { password } = req.body;
   const { user } = res.locals;
+
   const validPassword = bcrypt.compareSync(password, user.password);
 
   try {
@@ -65,5 +66,3 @@ export async function signOut(req, res) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
   }
 }
-
-

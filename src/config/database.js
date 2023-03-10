@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const { Pool } = pg;
-
 const configDatabase = {
   connectionString: process.env.DATABASE_URL,
   ...(process.env.NODE_ENV === "production" && {
@@ -15,4 +14,4 @@ const configDatabase = {
 
 const db = new Pool(configDatabase);
 
-export { db };
+export default db;

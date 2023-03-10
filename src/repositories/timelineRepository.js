@@ -1,4 +1,4 @@
-import { db } from "../config/database.js";
+import db from "../config/database.js";
 import { TABLE } from "../enums/tables.js";
 
 export async function findUserIdbyToken(token){
