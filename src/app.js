@@ -19,6 +19,8 @@ server.use([authRouter, timelineRouter]);
 server.use(searchRouter);
 server.use([authRouter, hashtagsRouter]);
 
+const PORT = process.env.PORT
+
 server.listen(process.env.PORT, () =>
   console.log(chalk.cyan("Servidor Funfou!"))
 );
