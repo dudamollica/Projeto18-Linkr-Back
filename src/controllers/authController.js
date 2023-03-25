@@ -44,7 +44,7 @@ export async function signIn(req, res) {
     }
 
     await authRepository.insertUserIntoSessions(user.id, token);
-    return res.status(STATUS_CODE.OK).send({ token });
+    return res.status(STATUS_CODE.OK).send({ token, name: user[0].username, photo: user[0].picture_url });
   } catch (error) {
     return res.sendStatus(STATUS_CODE.SERVER_ERROR);
   }

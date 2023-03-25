@@ -3,14 +3,10 @@ import urlMetadata from "url-metadata";
 
 export async function searchUsername(req, res) {
     const { name } = req.body;
-  console.log(name)
+
     try {
-      console.log("1")
       const { rows: users } = await searchRepository.getSearch(name);
-      console.log("2")
-      console.log(users)
       res.status(200).send(users);
-      console.log(res.status(200).send(users))
     } catch (error) {
       res.sendStatus(500);
     }
@@ -18,6 +14,7 @@ export async function searchUsername(req, res) {
   
   export async function searchUsernameById(req, res) {
     const { id } = req.params;
+
     try {
       const { rows: users } = await searchRepository.getSearchUsernameById(id);
       if (users.length === 0) {
@@ -33,14 +30,14 @@ export async function searchUsername(req, res) {
 
   export async function getPostById(req, res) {
     const { id } = req.params;
+
     try {
         const { rows: posts } = await searchRepository.getSearchPostById(id);
   
-        const postsMetadata = await Promise.all(
+        const metadataPosts = await Promise.all(
             posts.map(async ({ id, likes, username, photo, url, post, userId }) => {
                 const like = parseInt(likes);
                 const metadata = await urlMetadata(url);
-                console.log(metadata)
                 return {
                     id,
                     username,
@@ -56,7 +53,7 @@ export async function searchUsername(req, res) {
             })
         );
   
-        res.status(200).send(postsMetadata);
+        res.status(200).send(metadataPosts);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
