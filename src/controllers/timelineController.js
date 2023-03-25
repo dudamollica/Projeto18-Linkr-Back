@@ -36,6 +36,15 @@ export async function getPosts(req, res){
     }
 }
 
+export async function getPosts(req, res){
+    try{
+        const posts = await timelineRepository.getAllPosts();
+        return res.send(posts.rows)
+    }catch(err){
+        return res.status(STATUS_CODE.SERVER_ERROR).send(err.message);
+    }
+}
+
 export async function postPublish(req, res){
     const { url, post_text } = req.body;
     const token = (req.headers.authorization).replace('Bearer ', '');
