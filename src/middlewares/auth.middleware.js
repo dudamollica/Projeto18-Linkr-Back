@@ -56,6 +56,7 @@ async function authUser(req, res, next) {
     }
 
     res.locals.userInfo = userInfo
+    console.log(userInfo);
 
     next();
   } catch (err) {
@@ -91,4 +92,3 @@ export async function authenticateUser(req, res, next) {
     return res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
   }
 }
-
